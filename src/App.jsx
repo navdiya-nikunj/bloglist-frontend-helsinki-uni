@@ -8,6 +8,7 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [notification, setNotification] = useState(null);
   const [blog, setBlog] = useState({
     title: "",
     author: "",
@@ -35,6 +36,10 @@ const App = () => {
       console.log(user);
     } catch (e) {
       console.log(e);
+      setNotification({
+        message: "Wrong username or password",
+        color: "red",
+      });
     }
   };
 
@@ -49,6 +54,10 @@ const App = () => {
       const addedBlog = await blogService.addBlog(user.token, blog);
       console.log(addedBlog);
       await getblogs();
+      setNotification({
+        message: `${addedBlog.title} by ${addedBlog.author} is added`,
+        color: "green",
+      });
       setBlog({
         title: "",
         author: "",
@@ -65,113 +74,138 @@ const App = () => {
   };
 
   useEffect(() => {
+    if (notification) {
+      setTimeout(() => {
+        setNotification(null);
+      }, 5000);
+    }
+  }, [notification]);
+
+  useEffect(() => {
     if (user) {
       console.log("User", user);
       getblogs();
     }
   }, [user]);
 
-  return !user ? (
-    <div
-      style={{
-        height: "100vh",
-        width: "100vw",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          width: "30%",
-          height: "30%",
-          justifyContent: "space-around",
-          border: "1px solid black",
-          padding: 10,
-        }}
-      >
-        <label htmlFor="Username">Username:</label>
-        <input
-          type="text"
-          name="Username"
-          value={username}
-          onChange={(e) => {
-            setUsername(e.target.value);
-          }}
-        />
-        <label htmlFor="Password">Password:</label>
-        <input
-          type="password"
-          name="Password"
-          value={password}
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-        />
-        <button type="submit">Submit</button>
-      </form>
-    </div>
-  ) : (
-    <div>
-      <h2 style={{ textAlign: "center" }}>Blogs</h2>
-      <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-        <p style={{ textAlign: "center" }}>{user.name} is logged in </p>
-        <button onClick={handleLogOut}>Logout</button>
-      </div>
-      <div style={{ marginTop: 20, marginBottom: "20" }}>
-        <form
-          onSubmit={handleAddBlog}
+  return (
+    <>
+      {notification && (
+        <div
           style={{
-            display: "flex",
-            flexDirection: "column",
-            width: "30%",
-            height: "25vh",
-            justifyContent: "space-around",
-            border: "1px solid black",
-            padding: 10,
+            padding: 5,
+            border: `1px solid ${notification.color}`,
+            backgroundColor: "gray",
           }}
         >
-          <label htmlFor="Title">Title:</label>
-          <input
-            type="text"
-            name="Title"
-            value={blog.title}
-            onChange={(e) => {
-              setBlog({ ...blog, title: e.target.value });
+          <p style={{ color: `${notification.color}` }}>
+            {notification.message}
+          </p>
+        </div>
+      )}
+      {!user ? (
+        <div
+          style={{
+            height: "100vh",
+            width: "100vw",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <form
+            onSubmit={handleSubmit}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              width: "30%",
+              height: "30%",
+              justifyContent: "space-around",
+              border: "1px solid black",
+              padding: 10,
             }}
-          />
-          <label htmlFor="Author">Author:</label>
-          <input
-            type="text"
-            name="Author"
-            value={blog.author}
-            onChange={(e) => {
-              setBlog({ ...blog, author: e.target.value });
-            }}
-          />
-          <label htmlFor="URL">URL:</label>
-          <input
-            type="text"
-            name="URL"
-            value={blog.url}
-            onChange={(e) => {
-              setBlog({ ...blog, url: e.target.value });
-            }}
-          />
-          <button type="submit">Create</button>
-        </form>
-      </div>
-      <ol>
-        {blogs.map((blog) => (
-          <li key={blog.id}>
-            <Blog key={blog.id} blog={blog} />
-          </li>
-        ))}
-      </ol>
-    </div>
+          >
+            <label htmlFor="Username">Username:</label>
+            <input
+              type="text"
+              name="Username"
+              value={username}
+              onChange={(e) => {
+                setUsername(e.target.value);
+              }}
+            />
+            <label htmlFor="Password">Password:</label>
+            <input
+              type="password"
+              name="Password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+            />
+            <button type="submit">Submit</button>
+          </form>
+        </div>
+      ) : (
+        <div>
+          <h2 style={{ textAlign: "center" }}>Blogs</h2>
+          <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+            <p style={{ textAlign: "center" }}>{user.name} is logged in </p>
+            <button onClick={handleLogOut}>Logout</button>
+          </div>
+          <div style={{ marginTop: 20, marginBottom: "20" }}>
+            <form
+              onSubmit={handleAddBlog}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                width: "30%",
+                height: "25vh",
+                justifyContent: "space-around",
+                border: "1px solid black",
+                padding: 10,
+              }}
+            >
+              <label htmlFor="Title">Title:</label>
+              <input
+                type="text"
+                name="Title"
+                value={blog.title}
+                onChange={(e) => {
+                  setBlog({ ...blog, title: e.target.value });
+                }}
+              />
+              <label htmlFor="Author">Author:</label>
+              <input
+                type="text"
+                name="Author"
+                value={blog.author}
+                onChange={(e) => {
+                  setBlog({ ...blog, author: e.target.value });
+                }}
+              />
+              <label htmlFor="URL">URL:</label>
+              <input
+                type="text"
+                name="URL"
+                value={blog.url}
+                onChange={(e) => {
+                  setBlog({ ...blog, url: e.target.value });
+                }}
+              />
+              <button type="submit">Create</button>
+            </form>
+          </div>
+          <ol>
+            {blogs.map((blog) => (
+              <li key={blog.id}>
+                <Blog key={blog.id} blog={blog} />
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
+    </>
   );
 };
 export default App;
