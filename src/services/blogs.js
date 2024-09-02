@@ -7,8 +7,20 @@ const getAll = async (token) => {
       Authorization: `Bearer ${token}`
     }
   })
-  console.log(response.data);
   return response.data;
 }
 
-export default { getAll }
+const addBlog = async (token, blog) => {
+  try {
+    const res = await axios.post(baseUrl, blog, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return res.data;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export default { getAll, addBlog }
