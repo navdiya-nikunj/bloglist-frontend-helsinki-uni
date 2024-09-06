@@ -60,6 +60,19 @@ const App = () => {
     setUser(null);
   };
 
+  const deleteBlog = async (blog) => {
+    try {
+      await blogService.deleteBlog(user.token, blog.id);
+      await getblogs();
+      // console.log(deletedBlog);
+      setNotification({
+        message: `${blog.title} by ${blog.author} is deleted`,
+        color: "red",
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const addBlog = async (blog) => {
     try {
       const addedBlog = await blogService.addBlog(user.token, blog);
@@ -180,7 +193,12 @@ const App = () => {
                 style={{ border: "1px solid black", marginBottom: 10 }}
               >
                 <li>
-                  <Blog key={blog.id} blog={blog} likeBlog={likeBlog} />
+                  <Blog
+                    key={blog.id}
+                    blog={blog}
+                    likeBlog={likeBlog}
+                    deleteBlog={deleteBlog}
+                  />
                 </li>
               </div>
             ))}
