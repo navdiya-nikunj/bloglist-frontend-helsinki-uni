@@ -40,6 +40,21 @@ const App = () => {
     }
   };
 
+  const sortBlogs = () => {
+    console.log("hello");
+    console.log("Og", blogs);
+    const sortedBlogs = [...blogs].sort((blog1, blog2) => {
+      if (blog1.likes > blog2.likes) {
+        return -1;
+      } else if (blog1.likes < blog2.likes) {
+        return 1;
+      }
+      return 0;
+    });
+    console.log(sortedBlogs);
+    setBlogs(sortedBlogs);
+  };
+
   const handleLogOut = () => {
     localStorage.removeItem("User");
     setUser(null);
@@ -157,10 +172,14 @@ const App = () => {
           >
             <BlogForm addBlog={addBlog} />
           </Toggable>
+          <button onClick={sortBlogs}>Sort by likes</button>
           <ol>
             {blogs.map((blog) => (
-              <div style={{ border: "1px solid black", marginBottom: 10 }}>
-                <li key={blog.id}>
+              <div
+                key={blog.id}
+                style={{ border: "1px solid black", marginBottom: 10 }}
+              >
+                <li>
                   <Blog key={blog.id} blog={blog} likeBlog={likeBlog} />
                 </li>
               </div>
