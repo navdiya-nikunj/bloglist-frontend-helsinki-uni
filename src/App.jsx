@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import { login } from "./services/login";
+import Toggable from "./components/Toggable";
+import BlogForm from "./components/BlogForm";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -9,12 +11,8 @@ const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [notification, setNotification] = useState(null);
-  const [blog, setBlog] = useState({
-    title: "",
-    author: "",
-    url: "",
-  });
 
+  const blogFormRef = useRef();
   const getblogs = async () => {
     const blogs = await blogService.getAll(user.token);
     console.log(blogs);
@@ -48,31 +46,21 @@ const App = () => {
     setUser(null);
   };
 
-  const handleAddBlog = async (event) => {
-    event.preventDefault();
+  const addBlog = async (blog) => {
     try {
       const addedBlog = await blogService.addBlog(user.token, blog);
       console.log(addedBlog);
+      blogFormRef.current.toggleButton();
       await getblogs();
       setNotification({
         message: `${addedBlog.title} by ${addedBlog.author} is added`,
         color: "green",
       });
-      setBlog({
-        title: "",
-        author: "",
-        url: "",
-      });
     } catch (e) {
       alert(e);
-      setBlog({
-        title: "",
-        author: "",
-        url: "",
-      });
+      console.log(e);
     }
   };
-
   useEffect(() => {
     if (notification) {
       setTimeout(() => {
@@ -153,49 +141,9 @@ const App = () => {
             <p style={{ textAlign: "center" }}>{user.name} is logged in </p>
             <button onClick={handleLogOut}>Logout</button>
           </div>
-          <div style={{ marginTop: 20, marginBottom: "20" }}>
-            <form
-              onSubmit={handleAddBlog}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                width: "30%",
-                height: "25vh",
-                justifyContent: "space-around",
-                border: "1px solid black",
-                padding: 10,
-              }}
-            >
-              <label htmlFor="Title">Title:</label>
-              <input
-                type="text"
-                name="Title"
-                value={blog.title}
-                onChange={(e) => {
-                  setBlog({ ...blog, title: e.target.value });
-                }}
-              />
-              <label htmlFor="Author">Author:</label>
-              <input
-                type="text"
-                name="Author"
-                value={blog.author}
-                onChange={(e) => {
-                  setBlog({ ...blog, author: e.target.value });
-                }}
-              />
-              <label htmlFor="URL">URL:</label>
-              <input
-                type="text"
-                name="URL"
-                value={blog.url}
-                onChange={(e) => {
-                  setBlog({ ...blog, url: e.target.value });
-                }}
-              />
-              <button type="submit">Create</button>
-            </form>
-          </div>
+          <Toggable buttonLabel={"Add Blog"} ref={blogFormRef}>
+            <BlogForm addBlog={addBlog} />
+          </Toggable>
           <ol>
             {blogs.map((blog) => (
               <li key={blog.id}>
