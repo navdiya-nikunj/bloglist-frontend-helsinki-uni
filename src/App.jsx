@@ -141,14 +141,20 @@ const App = () => {
             <p style={{ textAlign: "center" }}>{user.name} is logged in </p>
             <button onClick={handleLogOut}>Logout</button>
           </div>
-          <Toggable buttonLabel={"Add Blog"} ref={blogFormRef}>
+          <Toggable
+            buttonLabel={"Add Blog"}
+            cancelButton={"Cancel"}
+            ref={blogFormRef}
+          >
             <BlogForm addBlog={addBlog} />
           </Toggable>
           <ol>
             {blogs.map((blog) => (
-              <li key={blog.id}>
-                <Blog key={blog.id} blog={blog} />
-              </li>
+              <div style={{ border: "1px solid black", marginBottom: 10 }}>
+                <li key={blog.id}>
+                  <Blog key={blog.id} blog={blog} />
+                </li>
+              </div>
             ))}
           </ol>
         </div>

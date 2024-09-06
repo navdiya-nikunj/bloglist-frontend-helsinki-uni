@@ -1,9 +1,9 @@
 import { forwardRef, useImperativeHandle, useState } from "react";
 
-const Toggable = forwardRef(({ children, buttonLabel }, refs) => {
+const Toggable = forwardRef(({ children, buttonLabel, cancelButton }, refs) => {
   const [isActive, setIsActive] = useState(false);
   const toggleButton = () => {
-    // console.log("isactive", isActive);
+    console.log("isactive", isActive);
     setIsActive(!isActive);
   };
 
@@ -21,7 +21,7 @@ const Toggable = forwardRef(({ children, buttonLabel }, refs) => {
   ) : (
     <>
       {children}
-      <button onClick={toggleButton}>Cancel</button>
+      <button onClick={toggleButton}>{cancelButton}</button>
     </>
   );
 });
