@@ -15,7 +15,6 @@ const App = () => {
   const blogFormRef = useRef();
   const getblogs = async () => {
     const blogs = await blogService.getAll(user.token);
-    console.log(blogs);
     setBlogs(blogs);
   };
 
@@ -61,6 +60,16 @@ const App = () => {
       console.log(e);
     }
   };
+
+  const likeBlog = async (blog) => {
+    try {
+      await blogService.addLike(user.token, blog);
+      await getblogs();
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   useEffect(() => {
     if (notification) {
       setTimeout(() => {
@@ -152,7 +161,7 @@ const App = () => {
             {blogs.map((blog) => (
               <div style={{ border: "1px solid black", marginBottom: 10 }}>
                 <li key={blog.id}>
-                  <Blog key={blog.id} blog={blog} />
+                  <Blog key={blog.id} blog={blog} likeBlog={likeBlog} />
                 </li>
               </div>
             ))}
