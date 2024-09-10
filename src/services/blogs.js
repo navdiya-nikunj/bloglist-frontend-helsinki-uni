@@ -7,7 +7,7 @@ const getAll = async (token) => {
       Authorization: `Bearer ${token}`
     }
   })
-  return response.data;
+  return response.data
 }
 
 const addBlog = async (token, blog) => {
@@ -16,10 +16,10 @@ const addBlog = async (token, blog) => {
       headers: {
         Authorization: `Bearer ${token}`
       }
-    });
-    return res.data;
+    })
+    return res.data
   } catch (e) {
-    console.log(e);
+    console.log(e)
   }
 }
 
@@ -31,9 +31,9 @@ const addLike = async (token, blog) => {
       }
     }
     )
-    return res.data;
+    return res.data
   } catch (e) {
-    console.log(e);
+    console.log(e)
   }
 }
 
@@ -45,10 +45,10 @@ const deleteBlog = async (token, blogid) => {
       }
     }
     )
-    console.log(res);
-    return res.data;
+    console.log(res)
+    return res.data
   } catch (e) {
-    console.log(e);
+    console.log(e)
   }
 }
 
