@@ -12,7 +12,7 @@ const Blog = ({ blog, likeBlog, deleteBlog }) => {
 		<div className='blog'>
 			{blog.title} by
 			{blog.author}
-			<Toggable buttonLabel={'View'} cancelButton={'hide'}>
+			<Toggable buttonLabel={'View'} cancelButton={'hide'} data-testid='toggable'>
 				<p className='url'>{blog.url}</p>
 				<p className='likes'>Likes: {blog.likes}</p>
 				<button onClick={addLike}>Like</button>
