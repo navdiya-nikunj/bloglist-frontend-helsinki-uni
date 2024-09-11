@@ -19,7 +19,7 @@ const Toggable = forwardRef(({ children, buttonLabel, cancelButton }, refs) => {
 	);
 	return (
 		<>
-			{isActive && children}
+			{isActive ? children : <></>}
 			<button onClick={toggleButton} className='toggleButton'>
 				{!isActive ? buttonLabel : cancelButton}
 			</button>
