@@ -15,7 +15,9 @@ const Blog = ({ blog, likeBlog, deleteBlog }) => {
 			<Toggable buttonLabel={'View'} cancelButton={'hide'} data-testid='toggable'>
 				<p className='url'>{blog.url}</p>
 				<p className='likes'>Likes: {blog.likes}</p>
-				<button onClick={addLike}>Like</button>
+				<button onClick={addLike} className='likebutton'>
+					Like
+				</button>
 				<p>{blog.author}</p>
 				<button onClick={handleDelete}>Delete</button>
 			</Toggable>
