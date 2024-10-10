@@ -47,6 +47,7 @@ const BlogForm = ({ addBlog }) => {
 					name='Title'
 					placeholder='title of blog'
 					value={blog.title}
+					data-testid='blogTitle'
 					onChange={(e) => {
 						setBlog({ ...blog, title: e.target.value });
 					}}
@@ -54,6 +55,7 @@ const BlogForm = ({ addBlog }) => {
 				<label htmlFor='Author'>Author:</label>
 				<input
 					type='text'
+					data-testid='blogAuthor'
 					placeholder='author of blog'
 					name='Author'
 					value={blog.author}
@@ -66,6 +68,7 @@ const BlogForm = ({ addBlog }) => {
 					type='text'
 					name='URL'
 					placeholder='URL of blog'
+					data-testid='blogURL'
 					value={blog.url}
 					onChange={(e) => {
 						setBlog({ ...blog, url: e.target.value });
