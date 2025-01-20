@@ -4,13 +4,18 @@ import blogService from "./services/blogs";
 import { login } from "./services/login";
 import Toggable from "./components/Toggable";
 import BlogForm from "./components/BlogForm";
+import { useSelector, useDispatch } from "react-redux";
+import { removeNotification, showNotification } from "./store/notification/notificationSlice";
+
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [notification, setNotification] = useState(null);
+  const dispatch = useDispatch();
+  const notification = useSelector(state=> state.notification);
+
 
   const blogFormRef = useRef();
   const getblogs = async () => {
@@ -33,10 +38,10 @@ const App = () => {
       console.log(user);
     } catch (e) {
       console.log(e);
-      setNotification({
-        message: "Wrong username or password",
-        color: "red",
-      });
+      dispatch(showNotification({
+        msg: "wrong username or password",
+        color: 'red'
+      }));
     }
   };
 
@@ -65,10 +70,11 @@ const App = () => {
       await blogService.deleteBlog(user.token, blog.id);
       await getblogs();
       // console.log(deletedBlog);
-      setNotification({
-        message: `${blog.title} by ${blog.author} is deleted`,
-        color: "red",
-      });
+      dispatch(showNotification({
+        msg: `${blog.title} by ${blog.author} is deleted`,
+        color: "red"
+      }))
+      
     } catch (e) {
       console.log(e);
     }
@@ -79,10 +85,11 @@ const App = () => {
       console.log(addedBlog);
       blogFormRef.current.toggleButton();
       await getblogs();
-      setNotification({
-        message: `${addedBlog.title} by ${addedBlog.author} is added`,
+      dispatch(showNotification({
+        msg:`${addedBlog.title} by ${addedBlog.author} is added`,
         color: "green",
-      });
+      }))
+      
     } catch (e) {
       alert(e);
       console.log(e);
@@ -99,7 +106,11 @@ const App = () => {
   };
 
   useEffect(() => {
-    if (notification) {
+    if(notification?.msg){
+      console.log(notification);
+      setTimeout(() => {
+        dispatch(removeNotification());
+      }, 5000);
     }
   }, [notification]);
 
@@ -112,7 +123,7 @@ const App = () => {
 
   return (
     <>
-      {notification && (
+      {notification?.msg && (
         <div
           className="error"
           style={{
@@ -122,7 +133,7 @@ const App = () => {
           }}
         >
           <p style={{ color: `${notification.color}` }}>
-            {notification.message}
+            {notification.msg}
           </p>
         </div>
       )}
