@@ -1,22 +1,22 @@
 import { useState, useEffect, useRef } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
-import { login } from "./services/login";
 import Toggable from "./components/Toggable";
 import BlogForm from "./components/BlogForm";
 import { useSelector, useDispatch } from "react-redux";
 import { removeNotification, showNotification } from "./store/notification/notificationSlice";
 import { addBlogFn, getAllBlogs, sortBlogs } from "./store/blogs/blogSlice";
+import { loginUser, logout, setuser } from "./store/user/userSlice";
 
 
 
 const App = () => {
-  const [user, setUser] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const notification = useSelector(state=> state.notification);
   const blogs = useSelector(state=> state.blog.blogs);
+  const user = useSelector(state => state.user);
 
 
   const blogFormRef = useRef();
@@ -25,16 +25,14 @@ const App = () => {
   useEffect(() => {
     const localstorageuser = localStorage.getItem("User");
     if (localstorageuser) {
-      setUser(JSON.parse(localstorageuser));
+      dispatch(setuser(JSON.parse(localstorageuser)));
     }
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const user = await login(username, password);
-      setUser(user);
-      console.log(user);
+      dispatch(loginUser(username, password));
     } catch (e) {
       console.log(e);
       dispatch(showNotification({
@@ -49,8 +47,7 @@ const App = () => {
   };
 
   const handleLogOut = () => {
-    localStorage.removeItem("User");
-    setUser(null);
+    dispatch(logout());
   };
 
   const deleteBlog = async (blog) => {
@@ -90,6 +87,7 @@ const App = () => {
   }, [notification]);
 
   useEffect(() => {
+    console.log(user);
     if (user) {
       dispatch(getAllBlogs(user.token));
     }
