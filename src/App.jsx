@@ -6,22 +6,21 @@ import Toggable from "./components/Toggable";
 import BlogForm from "./components/BlogForm";
 import { useSelector, useDispatch } from "react-redux";
 import { removeNotification, showNotification } from "./store/notification/notificationSlice";
+import { addBlogFn, getAllBlogs, sortBlogs } from "./store/blogs/blogSlice";
+
 
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const notification = useSelector(state=> state.notification);
+  const blogs = useSelector(state=> state.blog.blogs);
 
 
   const blogFormRef = useRef();
-  const getblogs = async () => {
-    const blogs = await blogService.getAll(user.token);
-    setBlogs(blogs);
-  };
+ 
 
   useEffect(() => {
     const localstorageuser = localStorage.getItem("User");
@@ -45,19 +44,8 @@ const App = () => {
     }
   };
 
-  const sortBlogs = () => {
-    console.log("hello");
-    console.log("Og", blogs);
-    const sortedBlogs = [...blogs].sort((blog1, blog2) => {
-      if (blog1.likes > blog2.likes) {
-        return -1;
-      } else if (blog1.likes < blog2.likes) {
-        return 1;
-      }
-      return 0;
-    });
-    console.log(sortedBlogs);
-    setBlogs(sortedBlogs);
+  const handleSortBlogs = () => {
+    dispatch(sortBlogs());
   };
 
   const handleLogOut = () => {
@@ -67,13 +55,7 @@ const App = () => {
 
   const deleteBlog = async (blog) => {
     try {
-      await blogService.deleteBlog(user.token, blog.id);
-      await getblogs();
-      // console.log(deletedBlog);
-      dispatch(showNotification({
-        msg: `${blog.title} by ${blog.author} is deleted`,
-        color: "red"
-      }))
+     dispatch(deleteBlog(user.token, blog));
       
     } catch (e) {
       console.log(e);
@@ -81,15 +63,8 @@ const App = () => {
   };
   const addBlog = async (blog) => {
     try {
-      const addedBlog = await blogService.addBlog(user.token, blog);
-      console.log(addedBlog);
+      dispatch(addBlogFn(user.token, blog));
       blogFormRef.current.toggleButton();
-      await getblogs();
-      dispatch(showNotification({
-        msg:`${addedBlog.title} by ${addedBlog.author} is added`,
-        color: "green",
-      }))
-      
     } catch (e) {
       alert(e);
       console.log(e);
@@ -98,8 +73,8 @@ const App = () => {
 
   const likeBlog = async (blog) => {
     try {
-      await blogService.addLike(user.token, blog);
-      await getblogs();
+       await blogService.addLike(user.token, blog);
+       dispatch(getAllBlogs(user.token));
     } catch (e) {
       console.log(e);
     }
@@ -116,8 +91,7 @@ const App = () => {
 
   useEffect(() => {
     if (user) {
-      console.log("User", user);
-      getblogs();
+      dispatch(getAllBlogs(user.token));
     }
   }, [user]);
 
@@ -197,9 +171,9 @@ const App = () => {
           >
             <BlogForm addBlog={addBlog} />
           </Toggable>
-          <button onClick={sortBlogs}>Sort by likes</button>
+          <button onClick={handleSortBlogs}>Sort by likes</button>
           <ol>
-            {blogs.map((blog) => (
+            {blogs?.map((blog) => (
               <div
                 key={blog.id}
                 style={{ border: "1px solid black", marginBottom: 10 }}
