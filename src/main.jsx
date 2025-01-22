@@ -6,6 +6,7 @@ import { Provider } from 'react-redux'
 import { BrowserRouter, Route, Routes } from 'react-router'
 import Layout from './Layout'
 import Users from './components/Users'
+import User from './components/User'
 ReactDOM.createRoot(document.getElementById('root')).render(
     <Provider store={store}>
         <BrowserRouter>
@@ -13,6 +14,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                 <Route element={<Layout />}>
                     <Route index element={<App />} />
                     <Route path="users" element={<Users />} />
+                    <Route path="user/:userId" element={<User />} />
                 </Route>
             </Routes>
         </BrowserRouter>

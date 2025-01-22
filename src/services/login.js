@@ -11,10 +11,5 @@ const logOut = async () => {
   localStorage.removeItem("User");
 }
 
-const getusers = async () => {
-  const res = await axios.get("/api/users");
-  console.log(res.data);
-  return res.data;
-}
 
-export default { login, logOut, getusers };
+export default { login, logOut };

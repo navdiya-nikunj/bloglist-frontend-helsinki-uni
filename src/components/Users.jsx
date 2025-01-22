@@ -1,11 +1,12 @@
-import { useEffect, useLayoutEffect, useState } from 'react'
-import login from '../services/login'
+import { useLayoutEffect, useState } from 'react'
+import { NavLink, useNavigate } from 'react-router'
+import user from '../services/user'
 
 const Users = () => {
     const [users, setUsers] = useState([])
-
+    const navigate = useNavigate()
     useLayoutEffect(() => {
-        login.getusers().then((res) => {
+        user.getusers().then((res) => {
             console.log(res)
             setUsers(res)
         })
@@ -40,7 +41,11 @@ const Users = () => {
                         {users?.map((user) => {
                             return (
                                 <tr key={user.id}>
-                                    <td>{user?.name}</td>
+                                    <td>
+                                        <NavLink to={`/user/${user.id}`}>
+                                            {user?.name}
+                                        </NavLink>
+                                    </td>
                                     <td>{user?.blogs.length}</td>
                                 </tr>
                             )
