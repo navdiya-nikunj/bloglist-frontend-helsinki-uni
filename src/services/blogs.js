@@ -23,7 +23,7 @@ const addBlog = async (token, blog) => {
   }
 };
 
-const addLike = async (token, blog) => {
+const updateBlog = async (token, blog) => {
   try {
     const res = await axios.put(`${baseUrl}/${blog.id}`, blog, {
       headers: {
@@ -66,4 +66,4 @@ const getBlog = async (token, blogId) => {
   }
 }
 
-export default { getAll, addBlog, addLike, deleteBlog, getBlog };
+export default { getAll, addBlog, updateBlog, deleteBlog, getBlog };

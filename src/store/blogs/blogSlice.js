@@ -80,9 +80,10 @@ export const deleteBlog = (token, blog) => {
     }
 }
 
-export const LikeBlog = (token, blog) => {
+export const updateBlogDetails = (token, blog) => {
     return async dispatch => {
-        const res = await blogService.addLike(token, blog);
+        const res = await blogService.updateBlog(token, blog);
         dispatch(updateBlog(res));
     }
 }
+

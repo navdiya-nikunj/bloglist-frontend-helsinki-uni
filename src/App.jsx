@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
-import blogService from './services/blogs'
+
 import Toggable from './components/Toggable'
 import BlogForm from './components/BlogForm'
 import { useSelector, useDispatch } from 'react-redux'
 import {
     addBlogFn,
     getAllBlogs,
-    LikeBlog,
+    updateBlogDetails,
     sortBlogs,
 } from './store/blogs/blogSlice'
 
@@ -42,7 +42,7 @@ const App = () => {
 
     const likeBlog = async (blog) => {
         try {
-            dispatch(LikeBlog(user.token, blog))
+            dispatch(updateBlogDetails(user.token, blog))
         } catch (e) {
             console.log(e)
         }
