@@ -31,6 +31,16 @@ const BlogView = () => {
                 <p>Likes: {blog?.likes}</p>
                 <button onClick={handleLike}>Like</button>
                 <p>By {blog?.author}</p>
+                {blog?.comments.length !== 0 && (
+                    <>
+                        <p>Commnets</p>
+                        <ul>
+                            {blog?.comments.map((comment, idx) => (
+                                <li key={idx}>{comment}</li>
+                            ))}
+                        </ul>
+                    </>
+                )}
             </>
         )
     )
