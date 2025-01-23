@@ -3,7 +3,7 @@ import Login from './components/auth/Login'
 import { useEffect } from 'react'
 import { removeNotification } from './store/notification/notificationSlice'
 import { logout, setuser } from './store/user/userSlice'
-import { Outlet } from 'react-router'
+import { NavLink, Outlet } from 'react-router'
 
 const Layout = () => {
     const user = useSelector((state) => state.user)
@@ -51,18 +51,21 @@ const Layout = () => {
                 <Login />
             ) : (
                 <>
-                    <h2 style={{ textAlign: 'center' }}>Blogs</h2>
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-evenly',
-                        }}
-                    >
-                        <p style={{ textAlign: 'center' }}>
-                            {user.name} is logged in{' '}
-                        </p>
-                        <button onClick={handleLogOut}>Logout</button>
-                    </div>
+                    <nav>
+                        <NavLink to={'/'}>Blogs</NavLink>
+                        <NavLink to={'/users'}>Users</NavLink>
+                        <div
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'space-evenly',
+                            }}
+                        >
+                            <p style={{ textAlign: 'center' }}>
+                                {user.name} is logged in{' '}
+                            </p>
+                            <button onClick={handleLogOut}>Logout</button>
+                        </div>
+                    </nav>
                     <Outlet />
                 </>
             )}

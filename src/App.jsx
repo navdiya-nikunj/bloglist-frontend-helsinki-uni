@@ -57,6 +57,7 @@ const App = () => {
 
     return (
         <>
+            <h2 style={{ textAlign: 'center' }}>Blogs</h2>
             <div>
                 <Toggable
                     buttonLabel={'Add Blog'}
