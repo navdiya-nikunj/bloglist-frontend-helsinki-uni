@@ -4,7 +4,12 @@ import blogService from './services/blogs'
 import Toggable from './components/Toggable'
 import BlogForm from './components/BlogForm'
 import { useSelector, useDispatch } from 'react-redux'
-import { addBlogFn, getAllBlogs, sortBlogs } from './store/blogs/blogSlice'
+import {
+    addBlogFn,
+    getAllBlogs,
+    LikeBlog,
+    sortBlogs,
+} from './store/blogs/blogSlice'
 
 const App = () => {
     const dispatch = useDispatch()
@@ -37,8 +42,7 @@ const App = () => {
 
     const likeBlog = async (blog) => {
         try {
-            await blogService.addLike(user.token, blog)
-            dispatch(getAllBlogs(user.token))
+            dispatch(LikeBlog(user.token, blog))
         } catch (e) {
             console.log(e)
         }

@@ -30,6 +30,7 @@ const addLike = async (token, blog) => {
         Authorization: `Bearer ${token}`,
       },
     });
+    console.log(res);
     return res.data;
   } catch (e) {
     console.log(e);
@@ -50,4 +51,19 @@ const deleteBlog = async (token, blogid) => {
   }
 };
 
-export default { getAll, addBlog, addLike, deleteBlog };
+const getBlog = async (token, blogId) => {
+  try {
+    const res = await axios.get(baseUrl + "/" + blogId, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    console.log(res);
+    return res.data;
+  }
+  catch (e) {
+    console.log(e);
+  }
+}
+
+export default { getAll, addBlog, addLike, deleteBlog, getBlog };

@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import blogService from '../../services/blogs';
 import { showNotification } from "../notification/notificationSlice";
+import blogs from "../../services/blogs";
 
 
 const blogSlice = createSlice({
@@ -31,12 +32,23 @@ const blogSlice = createSlice({
                     return 0;
                 })
             }
+        },
+        updateBlog(state, action) {
+            return {
+                blogs: state.blogs.map((blog) => {
+                    if (blog.id == action.payload.id) {
+                        return action.payload;
+                    }
+                    return blog;
+                })
+            }
+
         }
     }
 })
 
 export default blogSlice.reducer;
-export const { setBlogs, addBlog, removeBlog, sortBlogs } = blogSlice.actions;
+export const { setBlogs, addBlog, removeBlog, sortBlogs, updateBlog } = blogSlice.actions;
 
 
 export const getAllBlogs = (token) => {
@@ -65,5 +77,12 @@ export const deleteBlog = (token, blog) => {
             msg: `${res.title} by ${res.author} is deleted`,
             color: "red"
         }))
+    }
+}
+
+export const LikeBlog = (token, blog) => {
+    return async dispatch => {
+        const res = await blogService.addLike(token, blog);
+        dispatch(updateBlog(res));
     }
 }

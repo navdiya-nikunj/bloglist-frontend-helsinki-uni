@@ -1,6 +1,6 @@
 import { useLayoutEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router'
-import user from '../services/user'
+import user from '../../services/user'
 
 const Users = () => {
     const [users, setUsers] = useState([])

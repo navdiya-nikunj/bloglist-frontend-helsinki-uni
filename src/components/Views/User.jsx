@@ -1,6 +1,6 @@
 import { useLayoutEffect, useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router'
-import user from '../services/user'
+import user from '../../services/user'
 
 const User = () => {
     const [userInfo, setUserInfo] = useState(null)
