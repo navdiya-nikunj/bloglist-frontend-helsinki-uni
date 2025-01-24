@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginUser } from '../../store/user/userSlice'
+import { LoginContainer, LoginlayoutBg } from '../../styles/auth/loginStyles'
+import { Button, TextField } from '@mui/material'
 
 const Login = () => {
     const [username, setUsername] = useState('')
@@ -22,32 +24,13 @@ const Login = () => {
             )
         }
     }
-
     return (
-        <div
-            style={{
-                height: '100vh',
-                width: '100vw',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-            }}
-            className="loginform"
-        >
-            <form
-                onSubmit={handleSubmit}
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    width: '30%',
-                    height: '30%',
-                    justifyContent: 'space-around',
-                    border: '1px solid black',
-                    padding: 10,
-                }}
-            >
-                <label htmlFor="Username">Username:</label>
-                <input
+        <LoginlayoutBg>
+            <LoginContainer onSubmit={handleSubmit}>
+                <TextField
+                    id="filled-basic"
+                    label="Username"
+                    variant="filled"
                     type="text"
                     name="Username"
                     data-testid="username"
@@ -55,9 +38,14 @@ const Login = () => {
                     onChange={(e) => {
                         setUsername(e.target.value)
                     }}
+                    style={{
+                        margin: '1.5rem 0',
+                    }}
                 />
-                <label htmlFor="Password">Password:</label>
-                <input
+                <TextField
+                    id="filled-basic"
+                    label="Password"
+                    variant="filled"
                     data-testid="password"
                     type="password"
                     name="Password"
@@ -65,10 +53,22 @@ const Login = () => {
                     onChange={(e) => {
                         setPassword(e.target.value)
                     }}
+                    style={{
+                        margin: '1.5rem 0',
+                    }}
                 />
-                <button type="submit">Submit</button>
-            </form>
-        </div>
+                <Button
+                    variant="contained"
+                    type="submit"
+                    size="large"
+                    style={{
+                        margin: '1.5rem 0',
+                    }}
+                >
+                    Submit
+                </Button>
+            </LoginContainer>
+        </LoginlayoutBg>
     )
 }
 

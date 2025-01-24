@@ -18,7 +18,7 @@ const blogSlice = createSlice({
         },
         removeBlog(state, action) {
             return {
-                blogs: state.blogs.filter(blog => blog.id == action.payload.id)
+                blogs: state.blogs.filter(blog => blog.id !== action.payload)
             };
         },
         sortBlogs(state, action) {
@@ -71,8 +71,9 @@ export const addBlogFn = (token, blog) => {
 
 export const deleteBlog = (token, blog) => {
     return async dispatch => {
-        const res = await blogService.deleteBlog(token, blog);
-        dispatch(removeBlog(res));
+        const res = await blogService.deleteBlog(token, blog.id);
+
+        dispatch(removeBlog(blog.id));
         dispatch(showNotification({
             msg: `${res.title} by ${res.author} is deleted`,
             color: "red"

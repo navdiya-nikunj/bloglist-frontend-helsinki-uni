@@ -30,7 +30,6 @@ const updateBlog = async (token, blog) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(res);
     return res.data;
   } catch (e) {
     console.log(e);
@@ -44,7 +43,7 @@ const deleteBlog = async (token, blogid) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(res);
+
     return res.data;
   } catch (e) {
     console.log(e);
@@ -58,7 +57,7 @@ const getBlog = async (token, blogId) => {
         Authorization: `Bearer ${token}`
       }
     });
-    console.log(res);
+
     return res.data;
   }
   catch (e) {

@@ -8,7 +8,7 @@ const getusers = async () => {
 
 const getUser = async (id) => {
     const res = await axios.get(baseUrl + `/${id}`);
-    console.log(res.data);
+
     return res.data;
 }
 

@@ -4,6 +4,8 @@ import { useEffect } from 'react'
 import { removeNotification } from './store/notification/notificationSlice'
 import { logout, setuser } from './store/user/userSlice'
 import { NavLink, Outlet } from 'react-router'
+import ResponsiveAppBar from './components/ui/NavBar'
+import styled from 'styled-components'
 
 const Layout = () => {
     const user = useSelector((state) => state.user)
@@ -12,7 +14,7 @@ const Layout = () => {
 
     useEffect(() => {
         const localstorageuser = localStorage.getItem('User')
-        console.log(localstorageuser)
+
         if (localstorageuser) {
             dispatch(setuser(JSON.parse(localstorageuser)))
         }
@@ -20,16 +22,11 @@ const Layout = () => {
 
     useEffect(() => {
         if (notification?.msg) {
-            console.log(notification)
             setTimeout(() => {
                 dispatch(removeNotification())
             }, 5000)
         }
     }, [notification])
-
-    const handleLogOut = () => {
-        dispatch(logout())
-    }
 
     return (
         <>
@@ -50,27 +47,22 @@ const Layout = () => {
             {!user ? (
                 <Login />
             ) : (
-                <>
-                    <nav>
-                        <NavLink to={'/'}>Blogs</NavLink>
-                        <NavLink to={'/users'}>Users</NavLink>
-                        <div
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'space-evenly',
-                            }}
-                        >
-                            <p style={{ textAlign: 'center' }}>
-                                {user.name} is logged in{' '}
-                            </p>
-                            <button onClick={handleLogOut}>Logout</button>
-                        </div>
-                    </nav>
+                <MainLayout>
+                    <ResponsiveAppBar />
                     <Outlet />
-                </>
+                </MainLayout>
             )}
         </>
     )
 }
 
 export default Layout
+
+const MainLayout = styled.div`
+    background-image: url('/bg2.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    max-width: 100vw;
+`

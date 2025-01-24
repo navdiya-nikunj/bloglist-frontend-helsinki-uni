@@ -1,15 +1,17 @@
 import { useState, useEffect, useRef } from 'react'
-import Blog from './components/Blog'
-
-import Toggable from './components/Toggable'
-import BlogForm from './components/BlogForm'
+import Blog from './components/ui/Blog'
 import { useSelector, useDispatch } from 'react-redux'
 import {
     addBlogFn,
     getAllBlogs,
     updateBlogDetails,
     sortBlogs,
+    deleteBlog,
 } from './store/blogs/blogSlice'
+import { BlogsContainer } from './styles/home/blogsStyles'
+import { Button, Grid2, Typography } from '@mui/material'
+import { Add, Sort } from '@mui/icons-material'
+import BlogFormModel from './components/ui/BlogForm'
 
 const App = () => {
     const dispatch = useDispatch()
@@ -23,19 +25,10 @@ const App = () => {
         dispatch(sortBlogs())
     }
 
-    const deleteBlog = async (blog) => {
+    const deleteBlogFn = async (blog) => {
         try {
             dispatch(deleteBlog(user.token, blog))
         } catch (e) {
-            console.log(e)
-        }
-    }
-    const addBlog = async (blog) => {
-        try {
-            dispatch(addBlogFn(user.token, blog))
-            blogFormRef.current.toggleButton()
-        } catch (e) {
-            alert(e)
             console.log(e)
         }
     }
@@ -49,46 +42,70 @@ const App = () => {
     }
 
     useEffect(() => {
-        console.log(user)
         if (user) {
             dispatch(getAllBlogs(user.token))
         }
     }, [user])
 
     return (
-        <>
-            <h2 style={{ textAlign: 'center' }}>Blogs</h2>
-            <div>
-                <Toggable
-                    buttonLabel={'Add Blog'}
-                    cancelButton={'Cancel'}
-                    ref={blogFormRef}
+        <BlogsContainer>
+            <Grid2
+                container
+                spacing={2}
+                sx={{
+                    padding: '10px 20px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                }}
+            >
+                <Grid2
+                    size={{ md: 7, xs: 12 }}
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'start',
+                        alignSelf: 'flex-start',
+                    }}
                 >
-                    <BlogForm addBlog={addBlog} />
-                </Toggable>
-                <button onClick={handleSortBlogs}>Sort by likes</button>
-                <ol>
+                    <Typography
+                        variant="h3"
+                        component="h2"
+                        sx={{ fontWeight: 'bold' }}
+                        color="primary"
+                    >
+                        Blogs
+                    </Typography>
+                </Grid2>
+                <Grid2
+                    size={{ xs: 12, md: 3 }}
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Button onClick={handleSortBlogs}>
+                        <Sort /> Sort by likes
+                    </Button>
+                    <BlogFormModel />
+                    {/* <BlogForm addBlog={addBlog} /> */}
+                </Grid2>
+            </Grid2>
+            <div>
+                <Grid2 container>
                     {blogs?.map((blog) => (
-                        <div
-                            key={blog.id}
-                            style={{
-                                border: '1px solid black',
-                                marginBottom: 10,
-                            }}
-                        >
-                            <li>
-                                <Blog
-                                    key={blog.id}
-                                    blog={blog}
-                                    likeBlog={likeBlog}
-                                    deleteBlog={deleteBlog}
-                                />
-                            </li>
-                        </div>
+                        <Grid2 key={blog.id} size={{ xs: 12, md: 6, lg: 4 }}>
+                            <Blog
+                                key={blog.id}
+                                blog={blog}
+                                likeBlog={likeBlog}
+                                deleteBlog={deleteBlogFn}
+                            />
+                        </Grid2>
                     ))}
-                </ol>
+                </Grid2>
             </div>
-        </>
+        </BlogsContainer>
     )
 }
 export default App
